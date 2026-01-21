@@ -1,0 +1,158 @@
+"""Pydantic 스키마"""
+from datetime import datetime
+from decimal import Decimal
+from typing import List, Optional, Dict, Any
+from uuid import UUID
+from pydantic import BaseModel, EmailStr, Field
+
+
+# User 스키마
+class UserBase(BaseModel):
+    """사용자 기본 스키마"""
+    email: EmailStr
+
+
+class UserCreate(UserBase):
+    """사용자 생성 스키마"""
+    password: str = Field(..., min_length=8)
+
+
+class UserLogin(BaseModel):
+    """사용자 로그인 스키마"""
+    email: EmailStr
+    password: str
+
+
+class UserResponse(UserBase):
+    """사용자 응답 스키마"""
+    id: UUID
+    is_active: bool
+    is_2fa_enabled: bool
+    created_at: datetime
+    
+    model_config = {"from_attributes": True}
+
+
+# Token 스키마
+class Token(BaseModel):
+    """토큰 스키마"""
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+
+
+class TokenData(BaseModel):
+    """토큰 데이터 스키마"""
+    user_id: Optional[UUID] = None
+    email: Optional[str] = None
+
+
+# API Key 스키마
+class APIKeyCreate(BaseModel):
+    """API 키 생성 스키마"""
+    api_key: str
+    api_secret: str
+    exchange: str = "binance"
+    is_testnet: bool = True
+    ip_whitelist: Optional[List[str]] = None
+
+
+class APIKeyResponse(BaseModel):
+    """API 키 응답 스키마"""
+    id: UUID
+    exchange: str
+    is_testnet: bool
+    created_at: datetime
+    
+    model_config = {"from_attributes": True}
+
+
+# Trading 스키마
+class OrderRequest(BaseModel):
+    """주문 요청 스키마"""
+    symbol: str
+    side: str  # BUY, SELL
+    position_side: Optional[str] = "BOTH"  # LONG, SHORT, BOTH
+    order_type: str = "MARKET"  # MARKET, LIMIT, STOP, etc.
+    quantity: Decimal
+    price: Optional[Decimal] = None
+    time_in_force: Optional[str] = "GTC"
+
+
+class OrderResponse(BaseModel):
+    """주문 응답 스키마"""
+    order_id: str
+    symbol: str
+    side: str
+    order_type: str
+    quantity: Decimal
+    price: Optional[Decimal]
+    status: str
+    created_at: datetime
+
+
+class AccountBalance(BaseModel):
+    """계좌 잔고 스키마"""
+    asset: str
+    balance: Decimal
+    available_balance: Decimal
+    unrealized_pnl: Decimal
+
+
+class PositionRisk(BaseModel):
+    """포지션 리스크 스키마"""
+    symbol: str
+    position_side: str
+    position_amount: Decimal
+    entry_price: Decimal
+    mark_price: Decimal
+    unrealized_profit: Decimal
+    leverage: int
+
+
+class Kline(BaseModel):
+    """캔들 데이터 스키마"""
+    open_time: int
+    open_price: Decimal
+    high_price: Decimal
+    low_price: Decimal
+    close_price: Decimal
+    volume: Decimal
+    close_time: int
+    quote_asset_volume: Decimal
+    number_of_trades: int
+
+
+# Strategy 스키마
+class StrategyConfigCreate(BaseModel):
+    """전략 설정 생성 스키마"""
+    name: str
+    symbols: List[str]
+    timeframe: str = "1h"
+    k_value: Decimal = Field(default=Decimal("0.5"), ge=0, le=1)
+    rsi_overbought: int = Field(default=80, ge=50, le=100)
+    rsi_oversold: int = Field(default=20, ge=0, le=50)
+    fund_flow_threshold: int = Field(default=10, ge=0)
+    max_position_pct: Decimal = Field(default=Decimal("1.0"), ge=0, le=100)
+    stop_loss_pct: Decimal = Field(default=Decimal("2.0"), ge=0, le=100)
+    take_profit_ratio: Decimal = Field(default=Decimal("2.0"), ge=0)
+    mode: str = "paper"
+
+
+class StrategyConfigResponse(StrategyConfigCreate):
+    """전략 설정 응답 스키마"""
+    id: UUID
+    user_id: UUID
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+    
+    model_config = {"from_attributes": True}
+
+
+# Health Check
+class HealthCheck(BaseModel):
+    """헬스 체크 스키마"""
+    status: str
+    timestamp: datetime
+    version: str = "1.0.0"
