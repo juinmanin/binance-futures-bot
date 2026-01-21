@@ -42,5 +42,8 @@ TA-Lib==0.4.28
 python-dotenv==1.0.0
 pytz==2023.3.post1
 
+# Retry Logic
+tenacity==8.2.3
+
 # Logging
 loguru==0.7.2
