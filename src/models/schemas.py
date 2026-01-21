@@ -163,6 +163,42 @@ class StrategyConfigResponse(StrategyConfigCreate):
     model_config = {"from_attributes": True}
 
 
+# Pending Signal 스키마
+class PendingSignalCreate(BaseModel):
+    """대기 중인 신호 생성 스키마"""
+    symbol: str
+    action: str  # BUY, SELL
+    entry_price: Decimal
+    stop_loss: Decimal
+    take_profit_1: Decimal
+    take_profit_2: Decimal
+    position_size: Optional[Decimal] = None
+    atr: Optional[Decimal] = None
+    confidence: Optional[Decimal] = None
+    reason: Optional[str] = None
+    strategy_name: Optional[str] = None
+
+
+class PendingSignalResponse(BaseModel):
+    """대기 중인 신호 응답 스키마"""
+    id: UUID
+    symbol: str
+    action: str
+    entry_price: Decimal
+    stop_loss: Decimal
+    take_profit_1: Decimal
+    take_profit_2: Decimal
+    position_size: Optional[Decimal] = None
+    confidence: Optional[Decimal] = None
+    reason: Optional[str] = None
+    strategy_name: Optional[str] = None
+    status: str
+    created_at: datetime
+    expires_at: Optional[datetime] = None
+    
+    model_config = {"from_attributes": True}
+
+
 # Health Check
 class HealthCheck(BaseModel):
     """헬스 체크 스키마"""

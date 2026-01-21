@@ -97,3 +97,26 @@ class StrategyConfig(Base):
     
     # Relationships
     user = relationship("User", back_populates="strategy_configs")
+
+
+class PendingSignal(Base):
+    """대기 중인 거래 신호 테이블 (반자동 모드)"""
+    __tablename__ = "pending_signals"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    symbol = Column(String(20), nullable=False)
+    action = Column(String(10), nullable=False)  # BUY, SELL
+    entry_price = Column(Numeric(20, 8), nullable=False)
+    stop_loss = Column(Numeric(20, 8), nullable=False)
+    take_profit_1 = Column(Numeric(20, 8), nullable=False)
+    take_profit_2 = Column(Numeric(20, 8), nullable=False)
+    position_size = Column(Numeric(20, 8))
+    atr = Column(Numeric(20, 8))
+    confidence = Column(Numeric(3, 2))
+    reason = Column(Text)
+    strategy_name = Column(String(50))
+    status = Column(String(20), default="pending")  # pending, confirmed, rejected, expired
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime)  # 신호 만료 시간
+    executed_at = Column(DateTime)
