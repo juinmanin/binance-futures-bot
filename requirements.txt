@@ -1,5 +1,5 @@
 # FastAPI and dependencies
-fastapi==0.104.1
+fastapi==0.109.1
 uvicorn[standard]==0.24.0
 pydantic==2.5.0
 pydantic-settings==2.1.0
@@ -19,7 +19,7 @@ aio-pika==9.3.1
 
 # HTTP Client
 httpx==0.25.2
-aiohttp==3.9.1
+aiohttp==3.13.3
 
 # WebSocket
 websockets==12.0
@@ -27,11 +27,11 @@ websockets==12.0
 # Authentication
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-python-multipart==0.0.6
+python-multipart==0.0.18
 pyotp==2.9.0
 
 # Security
-cryptography==41.0.7
+cryptography==42.0.4
 
 # Data Analysis
 pandas==2.1.4

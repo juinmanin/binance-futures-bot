@@ -124,11 +124,19 @@
 ## 🔍 의존성 보안
 
 ### 주요 의존성 버전
-- FastAPI 0.104.1 (최신 안정 버전)
+- FastAPI 0.109.1 (보안 패치 적용 ✅)
 - SQLAlchemy 2.0.23 (최신 메이저 버전)
-- cryptography 41.0.7 (최신 보안 패치)
+- cryptography 42.0.4 (보안 패치 적용 ✅)
+- aiohttp 3.13.3 (보안 패치 적용 ✅)
+- python-multipart 0.0.18 (보안 패치 적용 ✅)
 - python-jose[cryptography] 3.3.0
 - passlib[bcrypt] 1.7.4
+
+### 최근 보안 업데이트 (2024-01-21)
+- ✅ aiohttp 3.9.1 → 3.13.3 (zip bomb, DoS, directory traversal 취약점 수정)
+- ✅ cryptography 41.0.7 → 42.0.4 (NULL pointer, Bleichenbacher 공격 취약점 수정)
+- ✅ fastapi 0.104.1 → 0.109.1 (ReDoS 취약점 수정)
+- ✅ python-multipart 0.0.6 → 0.0.18 (DoS, ReDoS 취약점 수정)
 
 ### 권장사항
 - ✅ 정기적인 의존성 업데이트
