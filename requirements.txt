@@ -1,0 +1,46 @@
+# FastAPI and dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Database
+sqlalchemy==2.0.23
+alembic==1.13.0
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+
+# Redis
+redis==5.0.1
+hiredis==2.2.3
+
+# RabbitMQ
+aio-pika==9.3.1
+
+# HTTP Client
+httpx==0.25.2
+aiohttp==3.9.1
+
+# WebSocket
+websockets==12.0
+
+# Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+pyotp==2.9.0
+
+# Security
+cryptography==41.0.7
+
+# Data Analysis
+pandas==2.1.4
+numpy==1.26.2
+TA-Lib==0.4.28
+
+# Utilities
+python-dotenv==1.0.0
+pytz==2023.3.post1
+
+# Logging
+loguru==0.7.2
