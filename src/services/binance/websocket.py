@@ -47,7 +47,7 @@ class BinanceWebSocket:
         Args:
             symbol: 심볼 (소문자, 예: btcusdt)
             interval: 간격 (1m, 5m, 15m, 30m, 1h, 4h, 1d, etc.)
-            callback: 데이터 수신 콜백 함수
+            callback: 데이터 수신 콜백 함수 (비동기 함수여야 함)
         """
         stream = WS_STREAMS["kline"].format(
             symbol=symbol.lower(),
@@ -65,7 +65,7 @@ class BinanceWebSocket:
         
         Args:
             symbol: 심볼 (소문자, 예: btcusdt)
-            callback: 데이터 수신 콜백 함수
+            callback: 데이터 수신 콜백 함수 (비동기 함수여야 함)
         """
         stream = WS_STREAMS["ticker"].format(symbol=symbol.lower())
         await self._subscribe(stream, callback)
@@ -80,7 +80,7 @@ class BinanceWebSocket:
         
         Args:
             listen_key: Listen Key
-            callback: 데이터 수신 콜백 함수
+            callback: 데이터 수신 콜백 함수 (비동기 함수여야 함)
         """
         # 유저 데이터 스트림은 다른 형식
         url = f"{self.ws_url}/ws/{listen_key}"
@@ -99,7 +99,11 @@ class BinanceWebSocket:
                                 timeout=30.0
                             )
                             data = json.loads(message)
-                            await callback(data)
+                            # 콜백이 코루틴인지 확인하고 처리
+                            if asyncio.iscoroutinefunction(callback):
+                                await callback(data)
+                            else:
+                                callback(data)
                         except asyncio.TimeoutError:
                             # Ping-pong for keeping connection alive
                             await websocket.ping()
@@ -112,7 +116,8 @@ class BinanceWebSocket:
                 if stream_id in self.connections:
                     del self.connections[stream_id]
         
-        self.running = True
+        if not self.running:
+            self.running = True
         asyncio.create_task(connect())
     
     async def _subscribe(
@@ -125,7 +130,7 @@ class BinanceWebSocket:
         
         Args:
             stream: 스트림 이름
-            callback: 데이터 수신 콜백 함수
+            callback: 데이터 수신 콜백 함수 (비동기 함수여야 함)
         """
         url = self._get_stream_url(stream)
         
@@ -142,7 +147,11 @@ class BinanceWebSocket:
                                 timeout=30.0
                             )
                             data = json.loads(message)
-                            await callback(data)
+                            # 콜백이 코루틴인지 확인하고 처리
+                            if asyncio.iscoroutinefunction(callback):
+                                await callback(data)
+                            else:
+                                callback(data)
                         except asyncio.TimeoutError:
                             # Ping-pong for keeping connection alive
                             await websocket.ping()
@@ -155,7 +164,8 @@ class BinanceWebSocket:
                 if stream in self.connections:
                     del self.connections[stream]
         
-        self.running = True
+        if not self.running:
+            self.running = True
         asyncio.create_task(connect())
     
     async def unsubscribe(self, stream: str) -> None:
