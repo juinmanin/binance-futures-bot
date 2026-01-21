@@ -94,3 +94,56 @@ class StrategyConfig(Base):
     
     # Relationships
     user = relationship("User", back_populates="strategy_configs")
+    signals = relationship("Signal", back_populates="strategy_config", cascade="all, delete-orphan")
+    backtest_results = relationship("BacktestResult", back_populates="strategy_config", cascade="all, delete-orphan")
+
+
+class Signal(Base):
+    """전략 신호 기록"""
+    __tablename__ = "signals"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    strategy_id = Column(UUID(as_uuid=True), ForeignKey("strategy_configs.id", ondelete="CASCADE"), nullable=False)
+    symbol = Column(String(20), nullable=False)
+    timeframe = Column(String(10), nullable=False)
+    action = Column(String(10), nullable=False)  # BUY/SELL/HOLD
+    confidence = Column(Numeric(3, 2), nullable=False)
+    entry_price = Column(Numeric(20, 8))
+    stop_loss = Column(Numeric(20, 8))
+    take_profit_1 = Column(Numeric(20, 8))
+    take_profit_2 = Column(Numeric(20, 8))
+    position_size = Column(Numeric(20, 8))
+    reason = Column(Text)
+    indicators = Column(JSONB)  # 신호 발생 시점의 지표 값들
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expired_at = Column(DateTime)  # 신호 만료 시간
+    status = Column(String(20), default="PENDING")  # PENDING/EXECUTED/EXPIRED/CANCELLED
+    
+    # Relationships
+    strategy_config = relationship("StrategyConfig", back_populates="signals")
+
+
+class BacktestResult(Base):
+    """백테스팅 결과"""
+    __tablename__ = "backtest_results"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    strategy_id = Column(UUID(as_uuid=True), ForeignKey("strategy_configs.id", ondelete="CASCADE"), nullable=False)
+    symbol = Column(String(20), nullable=False)
+    start_date = Column(DateTime, nullable=False)
+    end_date = Column(DateTime, nullable=False)
+    initial_capital = Column(Numeric(20, 2), nullable=False)
+    final_capital = Column(Numeric(20, 2), nullable=False)
+    total_return = Column(Numeric(10, 2))
+    win_rate = Column(Numeric(5, 2))
+    profit_factor = Column(Numeric(10, 2))
+    max_drawdown = Column(Numeric(5, 2))
+    sharpe_ratio = Column(Numeric(10, 2))
+    total_trades = Column(Integer)
+    avg_profit = Column(Numeric(20, 8))
+    avg_loss = Column(Numeric(20, 8))
+    trades_json = Column(JSONB)  # 개별 거래 기록
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    strategy_config = relationship("StrategyConfig", back_populates="backtest_results")
