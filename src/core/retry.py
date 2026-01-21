@@ -22,6 +22,9 @@ from src.core.exceptions import BinanceAPIException
 
 T = TypeVar('T')
 
+# Binance API 에러 코드
+RETRYABLE_ERROR_CODES = [-1001, -1003, -1021]  # 네트워크 오류, 요청 제한, 타임스탬프 오류
+
 
 class RetryHandler:
     """API 호출 재시도 로직"""
@@ -111,7 +114,7 @@ class RetryHandler:
                 last_exception = e
                 
                 # 재시도하지 않을 에러 코드
-                if hasattr(e, 'code') and e.code not in [-1001, -1003, -1021]:
+                if hasattr(e, 'code') and e.code not in RETRYABLE_ERROR_CODES:
                     logger.error(f"Non-retryable error: {e}")
                     raise
                 

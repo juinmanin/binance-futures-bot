@@ -332,7 +332,7 @@ async def close_position_by_symbol(
     try:
         from src.services.trading import PositionService
         
-        position_service = PositionService(client, db)
+        position_service = PositionService(client, db, str(current_user.id))
         
         async with client:
             if percentage == 100:

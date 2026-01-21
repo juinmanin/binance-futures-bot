@@ -88,15 +88,17 @@ class RealtimeDataManager:
                     self.callbacks[stream_key] = []
                 self.callbacks[stream_key].append(callback)
                 
-                # WebSocket 구독
-                async def kline_handler(data: dict):
-                    await self.on_kline_update(data, symbol, interval)
+                # WebSocket 구독 - 클로저 이슈 해결을 위해 부분 함수 사용
+                def make_kline_handler(sym: str, intv: str):
+                    async def kline_handler(data: dict):
+                        await self.on_kline_update(data, sym, intv)
+                    return kline_handler
                 
                 try:
                     await self.ws.subscribe_kline(
                         symbol=symbol.lower(),
                         interval=interval,
-                        callback=kline_handler
+                        callback=make_kline_handler(symbol, interval)
                     )
                     logger.info(f"Subscribed to kline: {stream_key}")
                 except Exception as e:

@@ -41,6 +41,7 @@ class TelegramNotificationService:
         self.bot_token = bot_token
         self.chat_id = chat_id
         self.enabled = bool(bot_token and chat_id and HTTPX_AVAILABLE)
+        self._client: Optional[httpx.AsyncClient] = None
         
         if not self.enabled:
             logger.warning(
@@ -51,6 +52,18 @@ class TelegramNotificationService:
             )
         else:
             logger.info("Telegram notifications enabled")
+    
+    async def _get_client(self) -> httpx.AsyncClient:
+        """HTTP 클라이언트 싱글톤 반환"""
+        if self._client is None:
+            self._client = httpx.AsyncClient(timeout=10.0)
+        return self._client
+    
+    async def close(self):
+        """HTTP 클라이언트 종료"""
+        if self._client is not None:
+            await self._client.aclose()
+            self._client = None
     
     async def _send_message(
         self,
@@ -83,11 +96,11 @@ class TelegramNotificationService:
         }
         
         try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(url, json=payload, timeout=10.0)
-                response.raise_for_status()
-                logger.info("Telegram message sent successfully")
-                return True
+            client = await self._get_client()
+            response = await client.post(url, json=payload)
+            response.raise_for_status()
+            logger.info("Telegram message sent successfully")
+            return True
         except Exception as e:
             logger.error(f"Failed to send Telegram message: {e}")
             return False
