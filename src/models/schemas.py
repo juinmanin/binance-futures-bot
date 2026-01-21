@@ -49,22 +49,34 @@ class TokenData(BaseModel):
 
 # API Key 스키마
 class APIKeyCreate(BaseModel):
-    """API 키 생성 스키마"""
-    api_key: str
-    api_secret: str
-    exchange: str = "binance"
-    is_testnet: bool = True
-    ip_whitelist: Optional[List[str]] = None
+    """UI에서 입력받은 API 키 데이터"""
+    api_key: str = Field(..., min_length=20, max_length=100, description="바이낸스 API Key")
+    api_secret: str = Field(..., min_length=20, max_length=100, description="바이낸스 API Secret")
+    is_testnet: bool = Field(default=True, description="테스트넷 여부")
+    label: str = Field(default="Default", max_length=50, description="API 키 라벨")
 
 
 class APIKeyResponse(BaseModel):
-    """API 키 응답 스키마"""
+    """마스킹된 API 키 응답"""
     id: UUID
+    label: str
+    masked_api_key: str  # 예: "abcd************"
     exchange: str
     is_testnet: bool
+    is_default: bool = False
     created_at: datetime
+    last_used_at: Optional[datetime] = None
     
     model_config = {"from_attributes": True}
+
+
+class APIKeyVerifyResponse(BaseModel):
+    """API 키 검증 결과"""
+    is_valid: bool
+    message: str
+    account_type: Optional[str] = None  # TESTNET/MAINNET
+    can_trade: bool = False
+    can_withdraw: bool = False
 
 
 # Trading 스키마
@@ -77,6 +89,7 @@ class OrderRequest(BaseModel):
     quantity: Decimal
     price: Optional[Decimal] = None
     time_in_force: Optional[str] = "GTC"
+    reduce_only: Optional[bool] = False
 
 
 class OrderResponse(BaseModel):

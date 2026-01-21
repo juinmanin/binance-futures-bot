@@ -40,8 +40,11 @@ class APIKey(Base):
     encrypted_api_key = Column(Text, nullable=False)
     encrypted_api_secret = Column(Text, nullable=False)
     is_testnet = Column(Boolean, default=True)
+    label = Column(String(50), default="Default")
+    is_default = Column(Boolean, default=False)
     ip_whitelist = Column(ARRAY(Text))
     created_at = Column(DateTime, default=datetime.utcnow)
+    last_used_at = Column(DateTime)
     
     # Relationships
     user = relationship("User", back_populates="api_keys")

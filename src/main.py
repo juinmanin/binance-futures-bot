@@ -6,7 +6,7 @@ from loguru import logger
 
 from src.config import settings
 from src.db import init_db, close_db
-from src.api.routes import health, auth, trading
+from src.api.routes import health, auth, trading, api_keys
 
 
 @asynccontextmanager
@@ -52,6 +52,7 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(trading.router)
+app.include_router(api_keys.router)
 
 
 @app.get("/")
