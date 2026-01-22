@@ -35,8 +35,13 @@ cryptography==42.0.4
 
 # Data Analysis
 pandas==2.1.4
-numpy==1.26.2
-TA-Lib==0.4.28
+numpy>=1.26.0,<2.0.0
+# TA-Lib==0.4.28  # Requires system library, install separately if needed
+# pandas-ta>=0.3.14b  # Alternative to TA-Lib (has numpy 2.x dependency)
+
+# Visualization (백테스팅 리포트)
+matplotlib>=3.7.0
+plotly>=5.15.0
 
 # Utilities
 python-dotenv==1.0.0
