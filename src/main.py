@@ -6,8 +6,7 @@ from loguru import logger
 
 from src.config import settings
 from src.db import init_db, close_db
-from src.api.routes import health, auth, trading, strategy
-
+from src.api.routes import health, auth, trading, api_keys, strategy
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -52,8 +51,8 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(trading.router)
+app.include_router(api_keys.router)
 app.include_router(strategy.router)
-
 
 @app.get("/")
 async def root():

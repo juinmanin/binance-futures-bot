@@ -239,6 +239,9 @@ class BinanceClient:
         if order.position_side:
             params["positionSide"] = order.position_side
         
+        if order.reduce_only:
+            params["reduceOnly"] = "true"
+        
         if order.order_type == "LIMIT":
             if not order.price:
                 raise BinanceAPIException("Price is required for LIMIT order")
