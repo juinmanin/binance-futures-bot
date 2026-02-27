@@ -44,3 +44,43 @@ class OrderException(TradingBotException):
 class WebSocketException(TradingBotException):
     """WebSocket 관련 예외"""
     pass
+
+
+class SolanaRPCException(TradingBotException):
+    """솔라나 RPC 관련 예외"""
+    pass
+
+
+class JupiterAPIException(TradingBotException):
+    """Jupiter DEX API 관련 예외"""
+    pass
+
+
+class AgentException(TradingBotException):
+    """AI 에이전트 관련 예외"""
+    pass
+
+
+class SkillException(TradingBotException):
+    """에이전트 스킬 관련 예외"""
+    pass
+
+
+class PumpFunException(TradingBotException):
+    """Pump.fun API 관련 예외"""
+    pass
+
+
+class RugCheckException(TradingBotException):
+    """RugCheck API 관련 예외"""
+    pass
+
+
+class JitoException(TradingBotException):
+    """Jito 번들/팁 관련 예외"""
+    pass
+
+
+class KillSwitchException(TradingBotException):
+    """일일 손실 한도 초과 — 킬스위치 발동"""
+    pass
