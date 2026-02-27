@@ -1,0 +1,93 @@
+{
+  "agents": {
+    "defaults": {
+      "model": "claude-sonnet-4-5",
+      "sandbox": { "mode": "non-main" },
+      "heartbeat": { "every": "2m" },
+      "max_tool_rounds": 15
+    },
+    "sol-sniper-bot": {
+      "soul": "SOUL.md",
+      "description": "Solana Pump.fun 신규 토큰 스나이퍼 + 자율 최적화"
+    }
+  },
+
+  "skills": {
+    "entries": {
+      "pump_fun": {
+        "enabled": true,
+        "env": {
+          "PUMP_FUN_API_URL": "https://frontend-api.pump.fun",
+          "RUGCHECK_API_URL": "https://api.rugcheck.xyz/v1",
+          "RUGCHECK_API_KEY": "${RUGCHECK_API_KEY}",
+          "PUMP_STOP_LOSS_PCT": 15,
+          "PUMP_TAKE_PROFIT_1_PCT": 30,
+          "PUMP_TRAILING_STOP_PCT": 5,
+          "PUMP_DEFAULT_SLIPPAGE_BPS": 1500,
+          "PUMP_MAX_SLIPPAGE_BPS": 2500
+        }
+      },
+      "jito_bribe": {
+        "enabled": true,
+        "env": {
+          "JITO_API_URL": "https://mainnet.block-engine.jito.wtf",
+          "JITO_DEFAULT_TIP_SOL": 0.001,
+          "JITO_MAX_TIP_SOL": 0.05,
+          "JITO_TIP_INCREMENT_SOL": 0.005,
+          "JITO_TIP_DECREMENT_SOL": 0.002
+        }
+      },
+      "cryptowallet": {
+        "enabled": true,
+        "env": {
+          "MASTER_ENCRYPTION_KEY": "${MASTER_ENCRYPTION_KEY}",
+          "OPENCLAW_ENCRYPTED_PRIVATE_KEY": "${OPENCLAW_ENCRYPTED_PRIVATE_KEY}"
+        },
+        "note": "개인키를 절대 평문으로 저장하지 마세요. 반드시 encrypt_key 액션으로 먼저 암호화하세요."
+      },
+      "self_optimizer": {
+        "enabled": true,
+        "env": {
+          "OPTIMIZER_WINDOW_SIZE": 5,
+          "OPTIMIZER_SLIPPAGE_INCREMENT_BPS": 200
+        }
+      },
+      "market_analysis": { "enabled": true },
+      "risk_guard": {
+        "enabled": true,
+        "env": {
+          "OPENCLAW_MAX_TRADE_USD": "${OPENCLAW_MAX_TRADE_USD}",
+          "OPENCLAW_DAILY_LOSS_LIMIT_USD": "${OPENCLAW_DAILY_LOSS_LIMIT_USD}",
+          "PUMP_KILL_SWITCH_PCT": 20
+        }
+      },
+      "trade_executor": {
+        "enabled": true,
+        "env": {
+          "SOLANA_RPC_URL": "${SOLANA_RPC_URL}",
+          "JUPITER_API_URL": "${JUPITER_API_URL}",
+          "OPENCLAW_DRY_RUN": "${OPENCLAW_DRY_RUN}"
+        }
+      },
+      "portfolio_tracker": { "enabled": true }
+    }
+  },
+
+  "gateway": {
+    "bind": "127.0.0.1",
+    "port": 18789,
+    "note": "로컬 바인딩 전용. 외부에서 접근 불가."
+  },
+
+  "security": {
+    "no_plaintext_keys": true,
+    "allow_withdrawal_without_human_approval": false,
+    "log_private_key": false,
+    "allowed_rpc_hosts": [
+      "api.mainnet-beta.solana.com",
+      "api.devnet.solana.com",
+      "*.helius-rpc.com",
+      "*.quiknode.pro"
+    ]
+  }
+}

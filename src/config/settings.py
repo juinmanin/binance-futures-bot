@@ -52,6 +52,32 @@ class Settings(BaseSettings):
     openclaw_dry_run: bool = True  # True: 실제 거래 없이 시뮬레이션
     openclaw_max_trade_usd: float = 100.0  # 단일 거래 최대 금액 (USD)
     openclaw_daily_loss_limit_usd: float = 50.0  # 일일 손실 한도 (USD)
+
+    # 공격적 투자 전략 (Pump.fun 스나이핑)
+    pump_fun_api_url: str = "https://frontend-api.pump.fun"
+    pump_stop_loss_pct: float = 15.0         # 손절 -15%
+    pump_take_profit_1_pct: float = 30.0     # 1차 익절 +30% (원금 50% 회수)
+    pump_trailing_stop_pct: float = 5.0      # 트레일링 스톱 5%
+    pump_kill_switch_pct: float = 20.0       # 일일 총 자산 20% 손실 시 24시간 중단
+    pump_default_slippage_bps: int = 1500    # 기본 슬리피지 15%
+    pump_max_slippage_bps: int = 2500        # 최대 슬리피지 25%
+
+    # Jito 번들 설정
+    jito_api_url: str = "https://mainnet.block-engine.jito.wtf"
+    jito_default_tip_sol: float = 0.001      # 기본 팁 0.001 SOL
+    jito_max_tip_sol: float = 0.05           # 최대 팁 0.05 SOL
+    jito_tip_increment_sol: float = 0.005    # 실패 시 팁 증가분
+    jito_tip_decrement_sol: float = 0.002    # 연속 성공 시 팁 감소분
+
+    # RugCheck 보안 필터
+    rugcheck_api_url: str = "https://api.rugcheck.xyz/v1"
+    rugcheck_api_key: str = ""
+    rugcheck_max_score: int = 100            # RugCheck 점수 100 이하만 허용
+    rugcheck_min_grad_rate: float = 30.0     # 졸업 가능성 30% 이상
+    rugcheck_max_bundle_pct: float = 25.0    # 번들 지갑 점유율 25% 미만
+
+    # 암호화 지갑
+    openclaw_encrypted_private_key: str = ""  # AES-256 암호화된 개인키
     
     model_config = SettingsConfigDict(
         env_file=".env",

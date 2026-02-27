@@ -64,3 +64,23 @@ class AgentException(TradingBotException):
 class SkillException(TradingBotException):
     """에이전트 스킬 관련 예외"""
     pass
+
+
+class PumpFunException(TradingBotException):
+    """Pump.fun API 관련 예외"""
+    pass
+
+
+class RugCheckException(TradingBotException):
+    """RugCheck API 관련 예외"""
+    pass
+
+
+class JitoException(TradingBotException):
+    """Jito 번들/팁 관련 예외"""
+    pass
+
+
+class KillSwitchException(TradingBotException):
+    """일일 손실 한도 초과 — 킬스위치 발동"""
+    pass
