@@ -44,3 +44,23 @@ class OrderException(TradingBotException):
 class WebSocketException(TradingBotException):
     """WebSocket 관련 예외"""
     pass
+
+
+class SolanaRPCException(TradingBotException):
+    """솔라나 RPC 관련 예외"""
+    pass
+
+
+class JupiterAPIException(TradingBotException):
+    """Jupiter DEX API 관련 예외"""
+    pass
+
+
+class AgentException(TradingBotException):
+    """AI 에이전트 관련 예외"""
+    pass
+
+
+class SkillException(TradingBotException):
+    """에이전트 스킬 관련 예외"""
+    pass

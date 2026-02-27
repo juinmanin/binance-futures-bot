@@ -33,6 +33,25 @@ class Settings(BaseSettings):
     
     # CORS
     cors_origins: str = "http://localhost:3000,http://localhost:8000"
+
+    # Solana Network
+    solana_rpc_url: str = "https://api.mainnet-beta.solana.com"
+    solana_testnet: bool = True
+    solana_testnet_rpc_url: str = "https://api.devnet.solana.com"
+    solana_wallet_private_key: str = ""  # Base58-encoded 64-byte keypair (optional)
+
+    # Jupiter DEX Aggregator
+    jupiter_api_url: str = "https://quote-api.jup.ag/v6"
+
+    # Claude AI (OpenClaw 에이전트)
+    anthropic_api_key: str = ""
+    claude_model: str = "claude-sonnet-4-5"
+    claude_max_tokens: int = 4096
+
+    # OpenClaw 에이전트 리스크 설정
+    openclaw_dry_run: bool = True  # True: 실제 거래 없이 시뮬레이션
+    openclaw_max_trade_usd: float = 100.0  # 단일 거래 최대 금액 (USD)
+    openclaw_daily_loss_limit_usd: float = 50.0  # 일일 손실 한도 (USD)
     
     model_config = SettingsConfigDict(
         env_file=".env",
