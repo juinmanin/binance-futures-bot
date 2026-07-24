@@ -152,7 +152,7 @@ class CryptoWalletSkill(BaseSkill):
             data={
                 "encrypted_key": encrypted,
                 "key_length": len(encrypted),
-                "note": "이 암호화된 키를 OPENCLAW_ENCRYPTED_PRIVATE_KEY 환경 변수에 저장하세요.",
+                "note": "이 암호화된 키를 ENCRYPTED_PRIVATE_KEY 환경 변수에 저장하세요.",
             },
             message="개인키가 AES-256으로 암호화되었습니다. 원본 키는 안전하게 폐기하세요.",
         )
